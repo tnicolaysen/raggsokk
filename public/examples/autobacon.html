@@ -20,9 +20,7 @@
 			$("#query")
 				.asEventStream("keyup")
 				.debounce(300)
-				.map(function(e) {
-                    return e.currentTarget.value;
-				})
+				.map(".currentTarget.value")
 				.filter(notEmpty)
 				.doAction(ws, 'send')
                 .onValue(function(input) {
@@ -37,9 +35,6 @@
                 .onValue(function(cities) {
                     console.log("Results:", cities.length, cities);
                 })
-            server.onValue(function(city) {
-            	console.log(city);
-            });
 		});
 	</script>
 </head>
