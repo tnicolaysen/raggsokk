@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "ws": "~0.4.31",
-    "ecstatic": "~0.4.12"
+    "ecstatic": "~0.4.12",
+    "placename": "~0.2.0"
   }
 }
