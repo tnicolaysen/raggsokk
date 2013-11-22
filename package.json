@@ -1,0 +1,22 @@
+{
+  "name": "raggsokk",
+  "version": "0.0.0",
+  "description": "raggsokk",
+  "main": "raggsokk.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tnicolaysen/raggsokk.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tnicolaysen/raggsokk/issues"
+  },
+  "dependencies": {
+    "ws": "~0.4.31",
+    "ecstatic": "~0.4.12"
+  }
+}
