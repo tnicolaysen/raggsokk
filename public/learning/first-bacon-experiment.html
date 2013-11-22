@@ -1,0 +1,18 @@
+<html>
+<head>
+	<title>Learning #1</title>
+	<script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../bower_components/bacon/dist/Bacon.js"></script>
+	
+	<script type="text/javascript">
+		$(function() {
+			var cliks = $("h2").asEventStream("click");
+			cliks.onValue(function() { alert("you clicked the h1 element") });
+		});
+	</script>
+</head>
+<body>
+	<h1>Learning Bacon.js</h1>
+	<h2>Click this f*cker!</h2>
+</body>
+</html>
