@@ -10,27 +10,19 @@
 	<script type="text/javascript">
 		$(function() {
 			var ws = new WebSocket("ws://localhost:8080");
-			var bus = Bacon.fromEventTarget(ws, 'message')
-
-			bus.map(function(e) {
-				return JSON.parse(e.data);
-			})
-			.onValue(function(e) {
-				console.log(e);
-			});
-
-			// ws.onmessage = function(e) {
-			//     var rows = JSON.parse(e.data);
-			//     bus.push(rows);
-			// };
-
+            Bacon.fromEventTarget(ws, 'message')
+                .map(function(e) {
+                    return JSON.parse(e.data);
+                })
+                .onValue(function(cities) {
+                    console.log(cities);
+                });
 
 			$("#query")
 				.asEventStream("keyup")
 				.debounce(300)
-				.map(function(e) { 
-					var sender = $(e.currentTarget);
-					return sender.val();
+				.map(function(e) {
+                    return e.currentTarget.value;
 				})
 				.filter(function(input) { return (input != ""); })
 				.onValue(function(currentInput) {
