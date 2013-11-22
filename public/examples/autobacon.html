@@ -46,12 +46,23 @@
                 .doAction(ws, 'send')
                 .onValue(_.partial(log, 'Searching'));
 
-            Bacon.fromEventTarget(ws, 'message')
+            var citiesStream = Bacon.fromEventTarget(ws, 'message')
                 .doAction(clearResults)
                 .map('.data')
                 .map(JSON.parse)
-                .flatMapLatest(Bacon.fromArray)
-                .onValue(addToResultList)
+                
+
+            var hasResult = citiesStream
+            	.map(function(res) {
+            		return res.length > 0;
+            	})
+            	.toProperty(false);
+
+            	hasResult.onValue(function(e) {console.log(e); })
+
+            citiesStream
+            	.flatMapLatest(Bacon.fromArray)
+                .onValue(addToResultList);
 		});
 	</script>
 </head>
