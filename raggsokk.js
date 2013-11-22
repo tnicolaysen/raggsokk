@@ -14,8 +14,13 @@ wss.on('connection', function(ws) {
         console.log('received: %s', message);
     });
 
-    setInterval(function() {
+    var id = setInterval(function() {
         ws.send(JSON.stringify({ val: Math.random() }));
     }, 100);
+
+    ws.on('close', function() {
+        console.log('stopping client interval');
+        clearInterval(id);
+    });
 
 });
