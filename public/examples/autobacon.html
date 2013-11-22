@@ -42,8 +42,9 @@
 			var server = Bacon.fromEventTarget(ws, 'message');
             server
             	.doAction(clearResults)
-            	.map(function(e) {
-                    return JSON.parse(e.data);
+                .map('.data')
+            	.map(function(data) {
+                    return JSON.parse(data);
                 })
                 .onValue(function(cities) {
                     console.log("Results:", cities.length, cities);
