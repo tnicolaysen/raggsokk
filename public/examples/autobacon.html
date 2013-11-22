@@ -18,8 +18,6 @@
                     console.log("Results:", cities.length, cities);
                 })
 
-            var search = ws.send.bind(ws);
-
 			$("#query")
 				.asEventStream("keyup")
 				.debounce(300)
@@ -27,10 +25,10 @@
                     return e.currentTarget.value;
 				})
 				.filter(function(input) { return (input != ""); })
-				.doAction(search)
+				.doAction(ws, 'send')
                 .onValue(function(input) {
                     console.log('Searching', input);
-                });;
+                });
 		});
 	</script>
 </head>
