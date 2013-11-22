@@ -15,8 +15,8 @@
                     return JSON.parse(e.data);
                 })
                 .onValue(function(cities) {
-                    console.log(cities);
-                });
+                    console.log("Results:", cities.length, cities);
+                })
 
 			$("#query")
 				.asEventStream("keyup")
@@ -25,9 +25,12 @@
                     return e.currentTarget.value;
 				})
 				.filter(function(input) { return (input != ""); })
-				.onValue(function(currentInput) {
+				.doAction(function(currentInput) {
 					ws.send(currentInput);
-				});
+                })
+                .onValue(function(input) {
+                    console.log('Searching', input);
+                });;
 		});
 	</script>
 </head>
