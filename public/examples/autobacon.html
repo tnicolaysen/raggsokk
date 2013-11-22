@@ -32,6 +32,7 @@
 				.debounce(300)
 				.map(".currentTarget.value")
 				.filter(notEmpty)
+                .skipDuplicates()
 				.doAction(ws, 'send')
                 .onValue(function(input) {
                     console.log('Searching', input);
