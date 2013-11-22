@@ -6,6 +6,7 @@
 
 	<script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
 	<script type="text/javascript" src="../bower_components/bacon/dist/Bacon.js"></script>
+	<script type="text/javascript" src="../bower_components/lodash/dist/lodash.js"></script>
 	
 	<script type="text/javascript">
 		$(function() {
@@ -25,8 +26,8 @@
 					.append("<li><a href='#'>" + city.name + " (" + city.country + ")</a></li>");
             }
 
-            var log = function(input) {
-                console.log('Searching', input);
+            var log = function() {
+                console.log.apply(console, arguments);
             }
 
 			$("#query")
@@ -36,7 +37,7 @@
 				.filter(notEmpty)
                 .skipDuplicates()
 				.doAction(ws, 'send')
-                .onValue(log);
+                .onValue(_.partial(log, 'Searching'));
 
 
 			Bacon.fromEventTarget(ws, 'message')
