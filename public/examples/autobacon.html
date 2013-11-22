@@ -11,8 +11,6 @@
 		$(function() {
 			var ws = new WebSocket("ws://localhost:8080");
   
-            var search = ws.send.bind(ws);
-
             var notEmpty = function(i) {
                 return i !== "";
             };
