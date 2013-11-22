@@ -9,6 +9,29 @@
 	
 	<script type="text/javascript">
 		$(function() {
+			var ws = new WebSocket("ws://localhost:8080");
+			var bus = new Bacon.Bus();
+
+			ws.onmessage = function(e) {
+			    var rows = JSON.parse(e.data);
+			    bus.push(rows);
+			};
+
+
+			$("#query")
+				.asEventStream("keyup")
+				.debounce(300)
+				.map(function(e) { 
+					var sender = $(e.currentTarget);
+					return sender.val();
+				})
+				.onValue(function(currentInput) {
+					ws.send(currentInput);
+				});
+
+			bus.onValue(function(rows) {
+				console.log(rows);
+			});
 			
 		});
 	</script>
@@ -25,7 +48,7 @@
 			        <legend>Find a country</legend>
 
 			        <label for="query">What are you looking for?</label>
-			        <input id="query" type="search" placeholder="Try Norway">
+			        <input id="query" type="search" placeholder="Try Norway" autofocus="autofocus">
 
 					<ul style="display: none">
 						<li>Suggestion #1</li>
