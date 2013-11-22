@@ -13,14 +13,18 @@
 		$(function() {
 			function ViewModel() {
 				var self = this;
-				self.query = ko.observable();
+				self.query = ko.observable("");
 				self.results = ko.observableArray();
+				self.noResults = ko.computed(function() {
+					return self.results().length === 0;
+				});
 
 				self.addCity = function(city) {
 					self.results.push(city);
 				};
 
 				self.clear = function() { self.results.removeAll(); }
+
 			}
 
 			var viewModel = new ViewModel();
@@ -42,12 +46,6 @@
                 .map(".currentTarget.value")
 
             valstream
-                .map(_.isEmpty)
-                .not()
-                .toProperty(false)
-                .assign($('#result-container'), 'toggle');
-
-            valstream
                 .debounce(300)
                 .filter(notEmpty)
                 .skipDuplicates()
@@ -58,11 +56,6 @@
                 .doAction(viewModel.clear)
                 .map('.data')
                 .map(JSON.parse)
-
-            citiesStream
-                .map(_.isEmpty)
-                .toProperty(false)
-                .assign($('.no-suggestions'), 'toggle');
 
             citiesStream
                 .flatMapLatest(Bacon.fromArray)
@@ -82,17 +75,18 @@
 			        <legend>Find a country</legend>
 
 			        <label for="query">What are you looking for?</label>
-			        <input id="query" type="search" placeholder="Try Norway" autofocus="autofocus" data-bind="value: query">
+			        <input id="query" type="search" placeholder="Try Norway" autofocus="autofocus" data-bind="value: query, valueUpdate: 'afterkeyup'">
 
-					<div id="result-container" class="pure-menu pure-menu-open">
+					<div class="pure-menu pure-menu-open" data-bind="visible: query() !== ''">
 					    <a class="pure-menu-heading">Suggestions</a>
 
-                        <div class="no-suggestions">No suggestions</div>
-
-						<ul data-bind="foreach: results">
-							<li>
-								<a data-bind="text: name"></a>
-							</li>
+						<ul>
+							<li data-bind="visible: noResults"><a>No suggestions</a></li>
+							<!-- ko foreach: results -->
+								<li>
+									<a data-bind="text: name"></a>
+								</li>
+							<!-- /ko -->
 						</ul>
 					</div>
 			    </fieldset>
