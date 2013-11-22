@@ -17,6 +17,16 @@
                 return i !== "";
             };
 
+            var clearResults = function() {
+            	$("#results")
+            		.empty();
+            }
+
+            var addToResultList = function(city) {
+				$("#results")
+					.append("<li><a href='#'>" + city.name + " (" + city.country + ")</a></li>");
+            }
+
 			$("#query")
 				.asEventStream("keyup")
 				.debounce(300)
@@ -29,11 +39,17 @@
 
 
 			var server = Bacon.fromEventTarget(ws, 'message');
-            server.map(function(e) {
+            server
+            	.doAction(clearResults)
+            	.map(function(e) {
                     return JSON.parse(e.data);
                 })
                 .onValue(function(cities) {
                     console.log("Results:", cities.length, cities);
+                    
+                    for(var i = 0; i < cities.length; i++) {
+                    	addToResultList(cities[i]);
+                    }
                 })
 		});
 	</script>
@@ -55,7 +71,7 @@
 					<div class="pure-menu pure-menu-open">
 					    <a class="pure-menu-heading">Suggestions</a>
 
-					    <ul>
+					    <ul id="results">
 					        <li><a href="#">Flickr</a></li>
 					    </ul>
 					</div>
