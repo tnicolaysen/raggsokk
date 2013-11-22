@@ -10,12 +10,19 @@
 	<script type="text/javascript">
 		$(function() {
 			var ws = new WebSocket("ws://localhost:8080");
-			var bus = new Bacon.Bus();
+			var bus = Bacon.fromEventTarget(ws, 'message')
 
-			ws.onmessage = function(e) {
-			    var rows = JSON.parse(e.data);
-			    bus.push(rows);
-			};
+			bus.map(function(e) {
+				return JSON.parse(e.data);
+			})
+			.onValue(function(e) {
+				console.log(e);
+			});
+
+			// ws.onmessage = function(e) {
+			//     var rows = JSON.parse(e.data);
+			//     bus.push(rows);
+			// };
 
 
 			$("#query")
@@ -25,14 +32,10 @@
 					var sender = $(e.currentTarget);
 					return sender.val();
 				})
+				.filter(function(input) { return (input != ""); })
 				.onValue(function(currentInput) {
 					ws.send(currentInput);
 				});
-
-			bus.onValue(function(rows) {
-				console.log(rows);
-			});
-			
 		});
 	</script>
 </head>
