@@ -37,20 +37,12 @@
                 });
 
 
-			var server = Bacon.fromEventTarget(ws, 'message');
-            server
-            	.doAction(clearResults)
+			Bacon.fromEventTarget(ws, 'message')
+                .doAction(clearResults)
                 .map('.data')
-            	.map(function(data) {
-                    return JSON.parse(data);
-                })
-                .onValue(function(cities) {
-                    console.log("Results:", cities.length, cities);
-                    
-                    for(var i = 0; i < cities.length; i++) {
-                    	addToResultList(cities[i]);
-                    }
-                })
+                .map(JSON.parse)
+                .flatMapLatest(Bacon.fromArray)
+                .onValue(addToResultList)
 		});
 	</script>
 </head>
@@ -74,8 +66,6 @@
 					    <ul id="results">
 					    </ul>
 					</div>
-
-			        <button type="submit" class="pure-button pure-button-primary">Don't push me!</button>
 			    </fieldset>
 			</form>
 	    </div>
