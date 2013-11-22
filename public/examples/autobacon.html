@@ -25,6 +25,10 @@
 					.append("<li><a href='#'>" + city.name + " (" + city.country + ")</a></li>");
             }
 
+            var log = function(input) {
+                console.log('Searching', input);
+            }
+
 			$("#query")
 				.asEventStream("keyup")
 				.debounce(300)
@@ -32,9 +36,7 @@
 				.filter(notEmpty)
                 .skipDuplicates()
 				.doAction(ws, 'send')
-                .onValue(function(input) {
-                    console.log('Searching', input);
-                });
+                .onValue(log);
 
 
 			Bacon.fromEventTarget(ws, 'message')
