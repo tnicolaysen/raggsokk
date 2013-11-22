@@ -10,13 +10,8 @@
 	<script type="text/javascript">
 		$(function() {
 			var ws = new WebSocket("ws://localhost:8080");
-            Bacon.fromEventTarget(ws, 'message')
-                .map(function(e) {
-                    return JSON.parse(e.data);
-                })
-                .onValue(function(cities) {
-                    console.log("Results:", cities.length, cities);
-                })
+  
+            var search = ws.send.bind(ws);
 
             var notEmpty = function(i) {
                 return i !== "";
@@ -33,6 +28,18 @@
                 .onValue(function(input) {
                     console.log('Searching', input);
                 });
+
+
+			var server = Bacon.fromEventTarget(ws, 'message');
+            server.map(function(e) {
+                    return JSON.parse(e.data);
+                })
+                .onValue(function(cities) {
+                    console.log("Results:", cities.length, cities);
+                })
+            server.onValue(function(city) {
+            	console.log(city);
+            });
 		});
 	</script>
 </head>
@@ -42,7 +49,7 @@
 	        <!-- Padding -->
 	    </div>
 
-	    <div class="pure-u-2-3">
+	    <div class="pure-u-1-3">
 			<form class="pure-form pure-form-stacked">
 			    <fieldset>
 			        <legend>Find a country</legend>
@@ -50,13 +57,21 @@
 			        <label for="query">What are you looking for?</label>
 			        <input id="query" type="search" placeholder="Try Norway" autofocus="autofocus">
 
-					<ul style="display: none">
-						<li>Suggestion #1</li>
-					</ul>
+					<div class="pure-menu pure-menu-open">
+					    <a class="pure-menu-heading">Suggestions</a>
+
+					    <ul>
+					        <li><a href="#">Flickr</a></li>
+					    </ul>
+					</div>
 
 			        <button type="submit" class="pure-button pure-button-primary">Don't push me!</button>
 			    </fieldset>
 			</form>
+	    </div>
+
+	    <div class="pure-u-1-3">
+	        <!-- Padding -->
 	    </div>
 	</div>
 </body>
