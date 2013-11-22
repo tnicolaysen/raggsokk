@@ -30,17 +30,23 @@
                 console.log.apply(console, arguments);
             }
 
-			$("#query")
-				.asEventStream("keyup")
-				.debounce(300)
-				.map(".currentTarget.value")
-				.filter(notEmpty)
+            var valstream = $("#query")
+                .asEventStream("keyup")
+                .map(".currentTarget.value")
+
+            valstream
+                .map(notEmpty)
+                .toProperty(false)
+                .assign($('#result-container'), 'toggle');
+
+            valstream
+                .debounce(300)
+                .filter(notEmpty)
                 .skipDuplicates()
-				.doAction(ws, 'send')
+                .doAction(ws, 'send')
                 .onValue(_.partial(log, 'Searching'));
 
-
-			Bacon.fromEventTarget(ws, 'message')
+            Bacon.fromEventTarget(ws, 'message')
                 .doAction(clearResults)
                 .map('.data')
                 .map(JSON.parse)
@@ -63,7 +69,7 @@
 			        <label for="query">What are you looking for?</label>
 			        <input id="query" type="search" placeholder="Try Norway" autofocus="autofocus">
 
-					<div class="pure-menu pure-menu-open">
+					<div id="result-container" class="pure-menu pure-menu-open">
 					    <a class="pure-menu-heading">Suggestions</a>
 
 					    <ul id="results">
