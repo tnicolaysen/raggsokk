@@ -50,18 +50,14 @@
                 .doAction(clearResults)
                 .map('.data')
                 .map(JSON.parse)
-                
-
-            var hasResult = citiesStream
-            	.map(function(res) {
-            		return res.length > 0;
-            	})
-            	.toProperty(false);
-
-            	hasResult.onValue(function(e) {console.log(e); })
 
             citiesStream
-            	.flatMapLatest(Bacon.fromArray)
+                .map(_.isEmpty)
+                .toProperty(false)
+                .assign($('.no-suggestions'), 'toggle');
+
+            citiesStream
+                .flatMapLatest(Bacon.fromArray)
                 .onValue(addToResultList);
 		});
 	</script>
@@ -82,6 +78,8 @@
 
 					<div id="result-container" class="pure-menu pure-menu-open">
 					    <a class="pure-menu-heading">Suggestions</a>
+
+                        <div class="no-suggestions">No suggestions</div>
 
 					    <ul id="results">
 					    </ul>
