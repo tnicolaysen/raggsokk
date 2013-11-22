@@ -18,13 +18,17 @@
                     console.log("Results:", cities.length, cities);
                 })
 
+            var notEmpty = function(i) {
+                return i !== "";
+            };
+
 			$("#query")
 				.asEventStream("keyup")
 				.debounce(300)
 				.map(function(e) {
                     return e.currentTarget.value;
 				})
-				.filter(function(input) { return (input != ""); })
+				.filter(notEmpty)
 				.doAction(ws, 'send')
                 .onValue(function(input) {
                     console.log('Searching', input);
