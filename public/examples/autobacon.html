@@ -54,6 +54,9 @@
                 .doAction(viewModel.clear)
                 .map('.data')
                 .map(JSON.parse)
+                .doAction(log)
+
+            citiesStream
                 .flatMapLatest(Bacon.fromArray)
                 .onValue(viewModel.addCity);
 		});
@@ -80,7 +83,11 @@
 							<li data-bind="visible: noResults"><a>No suggestions</a></li>
 							<!-- ko foreach: results -->
 								<li>
-									<a data-bind="text: name"></a>
+									<a href="#">
+										<!-- ko text: name --><!-- /ko -->
+										(<!-- ko text: country --><!-- /ko -->)
+										<small>Population <!-- ko text: population --><!-- /ko --></small>
+									</a>
 								</li>
 							<!-- /ko -->
 						</ul>
