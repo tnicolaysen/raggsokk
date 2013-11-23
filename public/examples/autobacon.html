@@ -44,8 +44,6 @@
             var valstream = $("#query")
                 .asEventStream("keyup")
                 .map(".currentTarget.value")
-
-            valstream
                 .debounce(300)
                 .filter(notEmpty)
                 .skipDuplicates()
@@ -56,8 +54,6 @@
                 .doAction(viewModel.clear)
                 .map('.data')
                 .map(JSON.parse)
-
-            citiesStream
                 .flatMapLatest(Bacon.fromArray)
                 .onValue(viewModel.addCity);
 		});
